@@ -1,0 +1,91 @@
+import java.util.*;
+
+public class Tic_tac_toe{
+
+    static String[] Board;
+    static String turn;
+
+    static String checkWinner(){
+        for(int a =0;a<8;a++){
+            String line = switch (a) {
+                case 0 -> Board[0] + Board[1] + Board[2];
+                case 1 -> Board[3] + Board[4] + Board[5];
+                case 2 -> Board[6] + Board[7] + Board[8];
+                case 3 -> Board[0] + Board[3] + Board[6];
+                case 4 -> Board[1] + Board[4] + Board[7];
+                case 5 -> Board[2] + Board[5] + Board[8];
+                case 6 -> Board[0] + Board[4] + Board[8];
+                case 7 -> Board[2] + Board[4] + Board[6];
+                default -> null;
+            };
+            if(line.equals("XXX")){
+                return "X";
+            } else if (line.equals("OOO")) {
+                return "O";
+            }
+        }
+        for(int a = 0; a<9 ; a++){
+            if(Arrays.asList(Board).contains(String.valueOf(a+1))){
+                break;
+            }
+            else if (a == 8){
+                return "draw";
+            }
+        }
+        System.out.println(turn + "'s turn; enter a slot no. to place " + turn + " in");
+        return null;
+    }
+    static void printBoard(){
+        System.out.println("|---|---|---|");
+        System.out.println("| "+ Board[0] + " | " + Board[1] + " | " + Board[2] + " |");
+        System.out.println("|---|---|---|");
+        System.out.println("| " + Board[3] + " | " + Board[4] + " | " + Board[5] +" |");
+        System.out.println("|---|---|---|");
+        System.out.println("| "+ Board[6] + " | " + Board[7] + " | " + Board[8] +" |");
+        System.out.println("|---|---|---|");
+    }
+
+    public static void main (String[] args){
+        Scanner sc = new Scanner(System.in);
+         Board = new String[9];
+        turn = "X";
+        String winner = null;
+
+        for(int a =0; a<9; a++){
+            Board[a] = String.valueOf(a+1);
+        }
+        System.out.println("Welcome to 3x3 tic tac toe.");
+        printBoard();
+        System.out.println("X will play first. Enter a slot number to place x in:");
+
+        while(winner == null){
+            int numInput;
+
+            try{
+                numInput = sc.nextInt();
+            if(!(numInput>0&&numInput<=9)){
+                System.out.println("Invalid Input; re-enter slot number:");
+                continue;
+            }
+            if(Board[numInput-1].equals(String.valueOf(numInput))){
+                Board[numInput-1] = turn;
+                turn =turn.equals("X") ? "O" : "X";
+
+                printBoard();
+                winner = checkWinner();
+            }  else {
+                System.out.println("slot is already taken; re-enter slot number:");
+            }
+            } catch (InputMismatchException e){
+                System.out.println("Invalid input; re-enter slot number:");
+                sc.nextLine();
+            }
+        }
+        if(winner.equalsIgnoreCase("draw")){
+            System.out.println("It's a Draw! Thanks for playing.");
+        }else {
+            System.out.println("Congratulation! " + winner + "'s have won! Thanks for playing.");
+        }
+        sc.close();
+    }
+}
